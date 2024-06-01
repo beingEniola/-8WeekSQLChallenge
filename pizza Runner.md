@@ -43,13 +43,11 @@ FROM pizza_runner.runners
 
 
 ```sql
-%%sql
 SELECT * 
 FROM pizza_runner.customer_orders
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    14 rows affected.
+
     
 
 
@@ -186,13 +184,11 @@ FROM pizza_runner.customer_orders
 
 
 ```sql
-%%sql
 SELECT * 
 FROM pizza_runner.runner_orders
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    10 rows affected.
+    
     
 
 
@@ -297,13 +293,10 @@ FROM pizza_runner.runner_orders
 
 
 ```sql
-%%sql
 SELECT * 
 FROM pizza_runner.pizza_names
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    2 rows affected.
     
 
 
@@ -332,13 +325,10 @@ FROM pizza_runner.pizza_names
 
 
 ```sql
-%%sql
 SELECT * 
 FROM pizza_runner.pizza_recipes
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    2 rows affected.
     
 
 
@@ -367,13 +357,10 @@ FROM pizza_runner.pizza_recipes
 
 
 ```sql
-%%sql
 SELECT * 
 FROM pizza_runner.pizza_toppings
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    12 rows affected.
     
 
 
@@ -444,13 +431,10 @@ FROM pizza_runner.pizza_toppings
 
 
 ```sql
-%%sql
 DROP TABLE customer_orders
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    Done.
-    
+   
 
 
 
@@ -461,7 +445,6 @@ DROP TABLE customer_orders
 
 
 ```sql
-%%sql
 SELECT order_id, customer_id, pizza_id, 
   CASE 
     WHEN exclusions = 'null'THEN ''
@@ -476,8 +459,6 @@ INTO customer_orders
 FROM pizza_runner.customer_orders;
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    14 rows affected.
     
 
 
@@ -489,13 +470,10 @@ FROM pizza_runner.customer_orders;
 
 
 ```sql
-%%sql 
 SELECT * 
 FROM customer_orders
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    14 rows affected.
     
 
 
@@ -632,13 +610,10 @@ FROM customer_orders
 
 
 ```sql
-%%sql
 DROP TABLE runner_orders
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    Done.
-    
+   
 
 
 
@@ -649,7 +624,6 @@ DROP TABLE runner_orders
 
 
 ```sql
-%%sql
 SELECT order_id, runner_id, 
     CASE 
         WHEN pickup_time = 'null' THEN ''
@@ -675,9 +649,7 @@ INTO runner_orders
 FROM pizza_runner.runner_orders
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    10 rows affected.
-    
+
 
 
 
@@ -688,13 +660,10 @@ FROM pizza_runner.runner_orders
 
 
 ```sql
-%%sql
 SELECT * 
 FROM runner_orders
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    10 rows affected.
     
 
 
@@ -1456,7 +1425,6 @@ GROUP BY runner_id
 
 
 ```sql
-%%sql
 WITH prep_time AS (
 SELECT c.order_id, COUNT(c.order_id) AS pizza_order, r.pickup_time, c.order_time,
     EXTRACT(MINUTE FROM AGE(r.pickup_time,c.order_time)) AS prep_minutes
@@ -1474,9 +1442,7 @@ FROM prep_time
 GROUP BY pizza_order
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    3 rows affected.
-    
+  
 
 
 
@@ -1510,7 +1476,6 @@ GROUP BY pizza_order
 
 
 ```sql
-%%sql
 SELECT c.customer_id, ROUND(AVG(r.distance)::numeric, 0) AS avg_distance
 FROM customer_orders c
     JOIN runner_orders r
@@ -1520,9 +1485,7 @@ GROUP BY c.customer_id
 ORDER BY avg_distance
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    5 rows affected.
-    
+   
 
 
 
@@ -1564,7 +1527,6 @@ ORDER BY avg_distance
 
 
 ```sql
-%%sql
 SELECT MAX(r.duration) - MIN(r.duration)
 FROM customer_orders c
     JOIN runner_orders r
@@ -1572,9 +1534,7 @@ FROM customer_orders c
 WHERE r.cancellation = ''
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    1 rows affected.
-    
+     
 
 
 
@@ -1598,7 +1558,6 @@ WHERE r.cancellation = ''
 
 
 ```sql
-%%sql
 SELECT  order_id, runner_id,
    ROUND((distance/ duration * 60)::NUMERIC, 2) AS avg_speed
 FROM runner_orders
@@ -1607,8 +1566,6 @@ GROUP BY order_id, runner_id, distance, duration
 ORDER BY order_id, runner_id
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    8 rows affected.
     
 
 
@@ -1672,17 +1629,13 @@ ORDER BY order_id, runner_id
 
 
 ```sql
-%%sql
 SELECT runner_id, ROUND(100* SUM(CASE WHEN distance IS NOT NULL THEN 1
                         ELSE 0 END)/COUNT(*),0) AS successful_delivery_perc
 FROM runner_orders
 GROUP BY runner_id
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    3 rows affected.
-    
-
+  
 
 
 
@@ -1717,7 +1670,6 @@ GROUP BY runner_id
 
 
 ```sql
-%%sql
 WITH cte_toppings AS (
 SELECT
 pt.topping_name,
@@ -1733,9 +1685,7 @@ ct.pizza_name,
 FROM cte_toppings ct
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    14 rows affected.
-    
+   
 
 
 
@@ -1813,7 +1763,7 @@ FROM cte_toppings ct
 
 
 ```sql
-%%sql
+
 WITH ct_extras AS (
 SELECT
         pizza_id,
@@ -1831,10 +1781,7 @@ GROUP BY extras, pt.topping_name
 ORDER BY extras_count DESC
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    3 rows affected.
-    
-
+   
 
 
 
@@ -1871,7 +1818,6 @@ ORDER BY extras_count DESC
 
 
 ```sql
-%%sql
 WITH ct_exclusions AS (
 SELECT
         pizza_id,
@@ -1889,8 +1835,6 @@ GROUP BY exclusions, pt.topping_name
 ORDER BY exclusions_count DESC
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    3 rows affected.
     
 
 
@@ -1929,7 +1873,6 @@ ORDER BY exclusions_count DESC
 
 
 ```sql
-%%sql
 SELECT c.order_id,
     c.pizza_id,
     pn.pizza_name,
@@ -1948,9 +1891,7 @@ FROM customer_orders c
 JOIN pizza_runner.pizza_names pn ON c.pizza_id = pn.pizza_id
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    14 rows affected.
-    
+     
 
 
 
@@ -2088,7 +2029,6 @@ JOIN pizza_runner.pizza_names pn ON c.pizza_id = pn.pizza_id
 
 
 ```sql
-%%sql
 WITH cte_toppings AS (
     SELECT
         pt.topping_name,
@@ -2122,8 +2062,7 @@ GROUP BY c.order_id, c.exclusions, c.customer_id, c.pizza_id,
          c.extras,c.order_time, ct.pizza_id, ct.pizza_name, tg.toppings  
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    13 rows affected.
+     
     
 
 
@@ -2268,7 +2207,6 @@ GROUP BY c.order_id, c.exclusions, c.customer_id, c.pizza_id,
 
 
 ```sql
-%%sql
 WITH ct_toppings AS ( 
 SELECT pizza_id,
     unnest(string_to_array(NULLIF(pr.toppings, ''), ','))::INT AS toppings
@@ -2288,10 +2226,7 @@ GROUP BY toppings, topping_name
 ORDER BY qty_ingredient desc;
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    12 rows affected.
-    
-
+  
 
 
 
@@ -2375,7 +2310,6 @@ ORDER BY qty_ingredient desc;
 
 
 ```sql
-%%sql
 SELECT SUM(CASE WHEN c.pizza_id = 1 THEN 12 
     ELSE 10
     END) AS total_pizza_price
@@ -2385,8 +2319,6 @@ FROM customer_orders c
 WHERE r.cancellation = ''
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    1 rows affected.
     
 
 
@@ -2411,7 +2343,6 @@ WHERE r.cancellation = ''
 
 
 ```sql
-%%sql
 SELECT SUM(CASE WHEN c.pizza_id = 1 THEN 12 + (CASE WHEN c.extras IS NOT NULL THEN 1 ELSE 0 END)
     ELSE 10 + (CASE WHEN c.extras IS NOT NULL THEN 1 ELSE 0 END)
     END) AS pizza_price
@@ -2421,9 +2352,7 @@ FROM customer_orders c
 WHERE r.cancellation = ''
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    1 rows affected.
-    
+     
 
 
 
@@ -2447,7 +2376,6 @@ WHERE r.cancellation = ''
 
 
 ```sql
-%%sql
 DROP TABLE IF EXISTS ratings;
 CREATE TABLE ratings (
 order_id int,
@@ -2459,11 +2387,7 @@ INSERT INTO ratings VALUES
 SELECT * FROM ratings
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    Done.
-    Done.
-    8 rows affected.
-    8 rows affected.
+    
     
 
 
@@ -2518,7 +2442,6 @@ SELECT * FROM ratings
 
 
 ```sql
-%%sql
 SELECT c.customer_id, c.order_id, r.runner_id, c.order_time,
         r.pickup_time, EXTRACT(MINUTE FROM AGE(r.pickup_time,c.order_time)) AS prep_time,
         r.duration AS delivery_duration, ROUND(((r.distance/r.duration)* 60)::NUMERIC, 2) AS Avg_speed,
@@ -2534,9 +2457,7 @@ GROUP BY c.customer_id, c.order_id, r.runner_id, c.order_time,
 ORDER BY c.customer_id
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    8 rows affected.
-    
+  
 
 
 
@@ -2653,7 +2574,6 @@ ORDER BY c.customer_id
 
 
 ```sql
-%%sql
 SELECT SUM(CASE WHEN c.pizza_id = 1 THEN 12  - (r.distance*0.30)
            ELSE 10 - (r.distance*0.30) 
            END) AS pizza_price
@@ -2663,9 +2583,6 @@ FROM customer_orders c
 WHERE r.cancellation = ''
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    1 rows affected.
-    
 
 
 
