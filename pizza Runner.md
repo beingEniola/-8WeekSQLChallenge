@@ -1,21 +1,12 @@
-```python
-%load_ext sql
-```
 
-
-```python
-%sql postgresql://***:***@***/***
-```
 
 
 ```sql
-%%sql
+
 SELECT * 
 FROM pizza_runner.runners
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    4 rows affected.
     
 
 
