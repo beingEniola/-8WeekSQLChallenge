@@ -799,7 +799,6 @@ FROM runner_orders
 
 
 ```sql
-%%sql
 ALTER TABLE runner_orders
 ALTER COLUMN pickup_time TYPE TIMESTAMP 
     USING CASE WHEN pickup_time = '' THEN NULL ELSE pickup_time::TIMESTAMP END,
@@ -809,8 +808,7 @@ ALTER COLUMN duration TYPE INT
         USING CASE WHEN duration = '' THEN NULL ELSE duration::integer END
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    Done.
+     
     
 
 
@@ -822,13 +820,10 @@ ALTER COLUMN duration TYPE INT
 
 
 ```sql
-%%sql
 SELECT *
 FROM runner_orders
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    10 rows affected.
     
 
 
@@ -937,13 +932,11 @@ FROM runner_orders
 
 
 ```sql
-%%sql
 SELECT COUNT(order_id)
 FROM customer_orders 
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    1 rows affected.
+    
     
 
 
@@ -968,13 +961,11 @@ FROM customer_orders
 
 
 ```sql
-%%sql
 SELECT COUNT(DISTINCT(order_id))
 FROM customer_orders 
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    1 rows affected.
+
     
 
 
@@ -999,7 +990,6 @@ FROM customer_orders
 
 
 ```sql
-%%sql 
 SELECT runner_id, COUNT(order_id)
 FROM runner_orders
 WHERE distance IS NOT NULL
@@ -1007,8 +997,7 @@ GROUP BY runner_id
 ORDER BY runner_id
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    3 rows affected.
+
     
 
 
@@ -1043,7 +1032,6 @@ ORDER BY runner_id
 
 
 ```sql
-%%sql 
 SELECT p.pizza_name, 
     COUNT(p.pizza_name) AS delivered_pizza_count
 FROM customer_orders c
@@ -1056,8 +1044,7 @@ GROUP BY p.pizza_name
 ORDER BY delivered_pizza_count DESC
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    2 rows affected.
+
     
 
 
@@ -1088,7 +1075,6 @@ ORDER BY delivered_pizza_count DESC
 
 
 ```sql
-%%sql
 SELECT c.customer_id, SUM(CASE WHEN c.pizza_id = 1 THEN 1 ELSE 0 END) AS meatlovers, 
     SUM(CASE WHEN c.pizza_id = 2 THEN 1 ELSE 0 END) AS vegeterians
 FROM customer_orders c
@@ -1096,8 +1082,7 @@ GROUP BY c.customer_id
 ORDER BY c.customer_id
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    5 rows affected.
+
     
 
 
@@ -1146,7 +1131,6 @@ ORDER BY c.customer_id
 
 
 ```sql
-%%sql
 WITH pizza_count_cte AS
 (
  SELECT c.order_id, COUNT(c.pizza_id) AS pizza_per_order
@@ -1161,8 +1145,7 @@ SELECT MAX(pizza_per_order) AS pizza_count
 FROM pizza_count_cte
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    1 rows affected.
+    
     
 
 
@@ -1187,7 +1170,6 @@ FROM pizza_count_cte
 
 
 ```sql
-%%sql
 SELECT c.customer_id, 
 SUM(CASE WHEN c.exclusions <> '' OR c.extras <> '' THEN 1 ELSE 0 END) AS at_least_1_change,
     SUM(CASE WHEN c.exclusions = '' AND c.extras = '' THEN 1 ELSE 0 END) AS no_change           
@@ -1200,9 +1182,7 @@ GROUP BY customer_id
 ORDER BY customer_id
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    5 rows affected.
-    
+     
 
 
 
@@ -1250,7 +1230,6 @@ ORDER BY customer_id
 
 
 ```sql
-%%sql
 SELECT COUNT(c.order_id) AS pizza_counts
 FROM customer_orders c
     JOIN runner_orders r
@@ -1258,8 +1237,6 @@ FROM customer_orders c
 WHERE c.exclusions NOT LIKE '' AND c.extras NOT LIKE '' AND r.cancellation = ''
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    1 rows affected.
     
 
 
@@ -1284,7 +1261,6 @@ WHERE c.exclusions NOT LIKE '' AND c.extras NOT LIKE '' AND r.cancellation = ''
 
 
 ```sql
-%%sql
 SELECT EXTRACT(HOUR FROM order_time)AS hour_of_day,
     COUNT(order_id) AS pizza_count
 FROM customer_orders
@@ -1292,8 +1268,6 @@ GROUP BY hour_of_day
 ORDER BY hour_of_day
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    6 rows affected.
     
 
 
@@ -1340,16 +1314,13 @@ ORDER BY hour_of_day
 
 
 ```sql
-%%sql
 SELECT TO_CHAR(order_time, 'Day') AS day_of_week,
     COUNT(order_id) AS total_pizzas_ordered
 FROM customer_orders
 GROUP BY day_of_week
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    4 rows affected.
-    
+   
 
 
 
@@ -1389,7 +1360,6 @@ GROUP BY day_of_week
 
 
 ```sql
-%%sql
 SELECT 
     TO_CHAR(registration_date, 'WW') AS registration_week, 
     COUNT(runner_id)
@@ -1398,8 +1368,7 @@ GROUP BY TO_CHAR(registration_date, 'WW')
 ORDER BY registration_week
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    3 rows affected.
+
     
 
 
@@ -1434,7 +1403,6 @@ ORDER BY registration_week
 
 
 ```sql
-%%sql
 WITH time_taken AS (
     SELECT p.runner_id, r.pickup_time, c.order_time, 
         EXTRACT(MINUTE FROM AGE(r.pickup_time,c.order_time)) AS pickup_minutes
@@ -1453,8 +1421,7 @@ FROM time_taken
 GROUP BY runner_id
 ```
 
-     * postgresql://postgres:***@localhost/postgres
-    3 rows affected.
+     
     
 
 
